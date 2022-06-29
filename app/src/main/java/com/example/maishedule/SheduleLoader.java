@@ -5,7 +5,7 @@ import android.content.Context;
 
 import java.util.List;
 
-public class SheduleLoader extends AsyncTaskLoader<List<Shedule>> {
+public class SheduleLoader extends AsyncTaskLoader<List<Group>> {
 
     private static final String LOG_TAG = SheduleLoader.class.getName();
 
@@ -27,11 +27,11 @@ public class SheduleLoader extends AsyncTaskLoader<List<Shedule>> {
     }
 
     @Override
-    public List<Shedule> loadInBackground() {
+    public List<Group> loadInBackground() {
         if(mUrl==null) {
             return null;
         }
-        List<Shedule> shedules = QueryUtils.fetchSheduleData(mUrl);
-        return shedules;
+        List<Group> groups = QueryUtils.fetchSheduleData(mUrl);
+        return groups;
     }
 }

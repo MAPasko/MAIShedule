@@ -20,7 +20,7 @@ public class SheduleAdapter extends RecyclerView.Adapter<SheduleAdapter.ViewHold
     private final LayoutInflater inflater;
     private final List<Shedule> shedules;
 
-    public SheduleAdapter(Context context, List<Shedule> shedules, OnSheduleClickListener onClickListener) {
+    public SheduleAdapter(Context context, List<Group> shedules, OnSheduleClickListener onClickListener) {
         this.shedules = shedules;
         this.inflater = LayoutInflater.from(context);
         this.onClickListener = onClickListener;

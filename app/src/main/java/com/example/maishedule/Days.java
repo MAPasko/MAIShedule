@@ -3,25 +3,25 @@ package com.example.maishedule;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Shedule {
+public class Days {
 
-    private int mWeek;
+    private int mDay;
 
-    private Days mDays;
+    private Lessons mLessons;
 
-    public Shedule(int Week, Days Days) {
+    public Days(int Day, Lessons Lessons) {
 
-        mWeek = Week;
-        mDays = Days;
+        mDay = Day;
+        mLessons = Lessons;
     }
 
-    public int getWeek() {return mWeek;}
+    public int getDay() {return mDay;}
 
-    public void setWeek(int week) {mWeek = week;}
+    public void setDay(int day) {mDay = day;}
 
-    public Days getDays() {return mDays;}
+    public Lessons getLessons() {return mLessons;}
 
-    public void setDays(Days days) {mDays = days;}
+    public void setLessons(Lessons lessons) {mLessons = lessons;}
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
         public Group createFromParcel(Parcel in) {

@@ -27,7 +27,7 @@ public class QueryUtils {
     private QueryUtils() {
     }
 
-    public static List<Shedule> fetchSheduleData(String requestUrl) {
+    public static List<Group> fetchSheduleData(String requestUrl) {
         URL url = createUrl(requestUrl);
 
         String jsonResponse = null;
@@ -37,9 +37,9 @@ public class QueryUtils {
             Log.e(LOG_TAG,"Problem making the HTTP request.",e);
         }
 
-        List<Shedule> shedules = extractFeatureFromJson(jsonResponse);
+        List<Group> groups = extractFeatureFromJson(jsonResponse);
 
-        return shedules;
+        return groups;
     }
 
     private static URL createUrl(String stringUrl) {
@@ -101,35 +101,77 @@ public class QueryUtils {
         return output.toString();
     }
 
-    private static List<Shedule> extractFeatureFromJson(String sheduleJSON) {
-        if(TextUtils.isEmpty(sheduleJSON)) {
+    private static List<Group> extractFeatureFromJson(String groupsJSON) {
+        if(TextUtils.isEmpty(groupsJSON)) {
             return null;
         }
 
+        List<Group> groups = new ArrayList<>();
         List<Shedule> shedules = new ArrayList<>();
+        List<Days> days = new ArrayList<>();
+        List<Lessons> lessons = new ArrayList<>();
 
         try {
-            JSONObject baseJsonResponse = new JSONObject(sheduleJSON);
+            JSONObject baseJsonResponse = new JSONObject(groupsJSON);
 
-            JSONArray shedulesArray = baseJsonResponse.getJSONArray("schedule");
+            JSONArray groupsArray = baseJsonResponse.getJSONArray("groups");
 
-            for(int i = 0; i < shedulesArray.length(); i++) {
-                JSONObject currentShedule = shedulesArray.getJSONObject(i);
+            for(int i = 0; i < groupsArray.length(); i++) {
+                JSONArray sheduleArray = baseJsonResponse.getJSONArray("shedule");
 
-                JSONObject oneDay = currentShedule.getJSONObject("days");
+                JSONObject currentGroup = groupsArray.getJSONObject(i);
 
-                String lesson = oneDay.getString("lesson");
-                String teacher = oneDay.getString("teacher");
-                String data = oneDay.getString("data");
-                String time = oneDay.getString("time");
-                String place = oneDay.getString("place");
+                JSONObject oneGroup = currentGroup.getJSONObject("groups");
 
-                Shedule shedule = new Shedule(lesson, teacher, data, time, place, i);
-                shedules.add(shedule);
+                String groupId = oneGroup.getString("groupid");
+
+                for(int j = 0; j < sheduleArray.length(); j++) {
+                    JSONArray daysArray = baseJsonResponse.getJSONArray("days");
+
+                    currentGroup = sheduleArray.getJSONObject(j);
+
+                    oneGroup = currentGroup.getJSONObject("shedule");
+
+                    int week = oneGroup.getInt("week");
+
+                    for(int k = 0; k < daysArray.length(); k++) {
+                        JSONArray lessonsArray = baseJsonResponse.getJSONArray("lessons");
+
+                        currentGroup = daysArray.getJSONObject(k);
+
+                        oneGroup = currentGroup.getJSONObject("days");
+
+                        int currentDay = oneGroup.getInt("day");
+
+                        for(int l = 0; l < lessonsArray.length(); l++) {
+
+                            currentGroup = lessonsArray.getJSONObject(l);
+
+                            oneGroup = currentGroup.getJSONObject("lessons");
+
+                            String currentLesson = oneGroup.getString("lesson");
+                            String teacher = oneGroup.getString("teacher");
+                            String time = oneGroup.getString("time");
+                            String place = oneGroup.getString("place");
+
+                            Lessons lesson = new Lessons(currentLesson, teacher, time, place);
+                            lessons.add(lesson);
+                        }
+
+                        Days day = new Days(currentDay, (Lessons) lessons);
+                        days.add(day);
+                    }
+
+                    Shedule shedule = new Shedule(week, (Days) days);
+                    shedules.add(shedule);
+                }
+
+                Group group = new Group(groupId, (Shedule) shedules);
+                groups.add(group);
             }
         } catch (JSONException e) {
-            Log.e("QueryUtils", "Problem parsing the shedule JSON results" + sheduleJSON, e);
+            Log.e("QueryUtils", "Problem parsing the shedule JSON results" + groupsJSON, e);
         }
-        return shedules;
+        return groups;
     }
 }

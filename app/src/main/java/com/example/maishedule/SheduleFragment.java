@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class SheduleActivity extends AppCompatActivity implements LoaderCallbacks<List<Shedule>> {
+public class SheduleFragment extends AppCompatActivity implements LoaderCallbacks<List<Group>> {
 
     private static final String MAI_REQUEST_URL = "https://f3c1014e-8e89-49a9-8c30-13367dd34f68.mock.pstmn.io/education/schedule/detail.php";
 
@@ -55,33 +55,33 @@ public class SheduleActivity extends AppCompatActivity implements LoaderCallback
     }
 
     @Override
-    public Loader<List<Shedule>> onCreateLoader(int i, Bundle bundle) {
+    public Loader<List<Group>> onCreateLoader(int i, Bundle bundle) {
         return new SheduleLoader(this, MAI_REQUEST_URL);
     }
 
     @Override
-    public void onLoadFinished(Loader<List<Shedule>> loader,List<Shedule> shedules) {
+    public void onLoadFinished(Loader<List<Group>> loader,List<Group> groups) {
         mProgressBar.setVisibility(View.GONE);
 
         mEmptyStateTextView.setText("Расписание не найдено.");
 
-        if(shedules != null && !shedules.isEmpty()) {
+        if(groups != null && !groups.isEmpty()) {
             mEmptyStateTextView.setVisibility(View.GONE);
             RecyclerView sheduleRecycledView = (RecyclerView) findViewById(R.id.list);
             SheduleAdapter.OnSheduleClickListener sheduleClickListener = new SheduleAdapter.OnSheduleClickListener() {
                 @Override
                 public void onSheduleClick(Shedule shedule, int position) {
-                    Intent infoIntent = new Intent(SheduleActivity.this, Information.class);
-                    infoIntent.putExtra("shedule",shedule);
-                    startActivity(infoIntent);
+                    //Intent infoIntent = new Intent(SheduleFragment.this, Information.class);
+                    //infoIntent.putExtra("shedule",shedule);
+                    //startActivity(infoIntent);
                 }
             };
-            mAdapter = new SheduleAdapter(this, shedules, sheduleClickListener);
+            mAdapter = new SheduleAdapter(this, groups, sheduleClickListener);
             sheduleRecycledView.setAdapter(mAdapter);
         }
     }
 
     @Override
-    public void onLoaderReset(Loader<List<Shedule>> loader) {
+    public void onLoaderReset(Loader<List<Group>> loader) {
     }
 }
