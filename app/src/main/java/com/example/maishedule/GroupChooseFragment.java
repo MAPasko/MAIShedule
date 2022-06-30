@@ -1,23 +1,38 @@
 package com.example.maishedule;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
 public class GroupChooseFragment extends Fragment {
-    @Override
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.choose_group, container, false);
 
-        Shedule groups = getArguments().getParcelable("parced_info");
+       // if(getArguments() != null)
+        List<Group> groups = getArguments().getParcelable("parced_info");
 
-        return inflater.inflate(R.layout.choose_group, container, false);
+        RecyclerView groupRecycledView = (RecyclerView) view.findViewById(R.id.container);
+        GroupAdapter .OnGroupClickListener groupClickListener = new GroupAdapter.OnGroupClickListener() {
+            @Override
+            public void onGroupClick(Group group, int position) {
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sPref",Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("sPref",group.getGroup());
+                editor.apply();
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        };
+        //mAdapter = new GroupAdapter(this, groups, groupClickListener);
+        groupRecycledView.setAdapter(new GroupAdapter(getContext(),groups,groupClickListener));
+    return view;
     }
 }

@@ -3,13 +3,15 @@ package com.example.maishedule;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.List;
+
 public class Group implements Parcelable {
 
     private String mGroup;
 
-    private Shedule mShedule;
+    private List<Shedule> mShedule;
 
-    public Group(String Group, Shedule Shedule) {
+    public Group(String Group, List<Shedule> Shedule) {
 
         mGroup = Group;
         mShedule = Shedule;
@@ -19,9 +21,9 @@ public class Group implements Parcelable {
 
     public void setGroup(String group) {mGroup = group;}
 
-    public Shedule getmShedule() {return mShedule;}
+    public List<Shedule> getmShedule() {return mShedule;}
 
-    public void setShedule(Shedule shedule) {mShedule = shedule;}
+    public void setShedule(List<Shedule> shedule) {mShedule = shedule;}
 
     public Group(Parcel in){
         String[] data = new String[1];

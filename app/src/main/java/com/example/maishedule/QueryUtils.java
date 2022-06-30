@@ -158,15 +158,15 @@ public class QueryUtils {
                             lessons.add(lesson);
                         }
 
-                        Days day = new Days(currentDay, (Lessons) lessons);
+                        Days day = new Days(currentDay, (List<Lessons>) lessons);
                         days.add(day);
                     }
 
-                    Shedule shedule = new Shedule(week, (Days) days);
+                    Shedule shedule = new Shedule(week, (List<Days>) days);
                     shedules.add(shedule);
                 }
 
-                Group group = new Group(groupId, (Shedule) shedules);
+                Group group = new Group(groupId, (List<Shedule>) shedules);
                 groups.add(group);
             }
         } catch (JSONException e) {

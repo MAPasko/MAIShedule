@@ -3,13 +3,15 @@ package com.example.maishedule;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.List;
+
 public class Shedule {
 
     private int mWeek;
 
-    private Days mDays;
+    private List<Days> mDays;
 
-    public Shedule(int Week, Days Days) {
+    public Shedule(int Week, List<Days> Days) {
 
         mWeek = Week;
         mDays = Days;
@@ -19,9 +21,9 @@ public class Shedule {
 
     public void setWeek(int week) {mWeek = week;}
 
-    public Days getDays() {return mDays;}
+    public List<Days> getDays() {return mDays;}
 
-    public void setDays(Days days) {mDays = days;}
+    public void setDays(List<Days> days) {mDays = days;}
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
         public Group createFromParcel(Parcel in) {

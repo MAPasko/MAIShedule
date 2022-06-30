@@ -3,13 +3,11 @@ package com.example.maishedule;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -26,13 +24,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private static final int SHEDULE_LOADER_ID = 1;
 
-    private SheduleAdapter mAdapter;
-
     private TextView mEmptyStateTextView;
 
     private ProgressBar mProgressBar;
 
-    private Information mInformation;
+    private Bundle bundle;
+
+    private SharedPreferences sPref = getBaseContext().getSharedPreferences("sPref",MODE_PRIVATE);
+
+    //private SharedPreferences.Editor prefsEditor = sPref.edit();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,13 +62,19 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         // добавляем фрагмент
         GroupChooseFragment groupChooseFragment = new GroupChooseFragment();
-        fragmentTransaction.add(R.id.container, groupChooseFragment);
+        fragmentTransaction.add(R.id.choose_group_view, groupChooseFragment);
         fragmentTransaction.commit();
+
+        String group = sPref.getString("sPref", null);
 
         TextView startSearch = (TextView) findViewById(R.id.start);
         startSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SheduleFragment sheduleFragment = new SheduleFragment();
+                fragmentTransaction.add(R.id.choose_group_view, sheduleFragment);
+                sheduleFragment.setArguments(bundle);
+                fragmentTransaction.commit();
                         //Intent sheduleIntent = new Intent(MainActivity.this, SheduleFragment.class);
                         //startActivity(sheduleIntent);
             }
@@ -83,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<List<Group>> loader, List<Group> groups) {
         mProgressBar.setVisibility(View.GONE);
-        Bundle bundle =new Bundle();
+        bundle =new Bundle();
         bundle.putParcelable("parced_info", (Parcelable) groups);
         GroupChooseFragment info = new GroupChooseFragment();
         info.setArguments(bundle);

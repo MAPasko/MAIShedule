@@ -13,25 +13,21 @@ public class Information extends AppCompatActivity {
         setContentView(R.layout.information);
 
         Bundle data = getIntent().getExtras();
-        Shedule shedule = (Shedule) data.getParcelable("shedule");
+        Lessons lessons = (Lessons) data.getParcelable("lessons");
 
         TextView lessonView = (TextView) findViewById(R.id.lesson);
-        lessonView.setText(shedule.getLesson());
+        lessonView.setText(lessons.getLesson());
 
 
         TextView teacherView = (TextView) findViewById(R.id.teacher);
-        teacherView.setText(shedule.getTeacher());
-
-
-        TextView dateView = (TextView) findViewById(R.id.date);
-        dateView.setText(shedule.getDate());
+        teacherView.setText(lessons.getTeacher());
 
 
         TextView timeView = (TextView) findViewById(R.id.time);
-        timeView.setText(shedule.getTime());
+        timeView.setText(lessons.getTime());
 
 
         TextView placeView = (TextView) findViewById(R.id.place);
-        placeView.setText(shedule.getPlace());
+        placeView.setText(lessons.getPlace());
     }
 }

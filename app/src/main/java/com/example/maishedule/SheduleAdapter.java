@@ -13,15 +13,15 @@ import java.util.List;
 public class SheduleAdapter extends RecyclerView.Adapter<SheduleAdapter.ViewHolder> {
 
     interface OnSheduleClickListener{
-        void onSheduleClick(Shedule shedule,int position);
+        void onSheduleClick(Group groups,int position);
     }
 
     private final OnSheduleClickListener onClickListener;
     private final LayoutInflater inflater;
-    private final List<Shedule> shedules;
+    private final List<Group> shedules;
 
-    public SheduleAdapter(Context context, List<Group> shedules, OnSheduleClickListener onClickListener) {
-        this.shedules = shedules;
+    public SheduleAdapter(Context context, List<Group> groups, OnSheduleClickListener onClickListener) {
+        this.shedules = groups;
         this.inflater = LayoutInflater.from(context);
         this.onClickListener = onClickListener;
     }
@@ -34,14 +34,14 @@ public class SheduleAdapter extends RecyclerView.Adapter<SheduleAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(SheduleAdapter.ViewHolder holder, int viewType) {
-        Shedule shedule = shedules.get(holder.getAdapterPosition());
-        holder.timeView.setText(shedule.getTime());
-        holder.lessonView.setText(shedule.getLesson());
-        holder.placeView.setText(shedule.getPlace());
+        Group group = shedules.get(holder.getAdapterPosition());
+        holder.timeView.setText(group.getTime());
+        holder.lessonView.setText(group.getLesson());
+        holder.placeView.setText(group.getPlace());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickListener.onSheduleClick(shedule, holder.getAdapterPosition());
+                onClickListener.onSheduleClick(group, holder.getAdapterPosition());
             }
         });
     }
