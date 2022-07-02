@@ -13,7 +13,7 @@ import java.util.List;
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder>{
 
     interface OnGroupClickListener {
-        void onGroupClick(Group shedule,int position);
+        void onGroupClick(Group group,int position);
     }
 
     private final OnGroupClickListener onClickListener;

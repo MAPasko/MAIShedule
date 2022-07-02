@@ -60,10 +60,12 @@ public class Lessons implements Parcelable{
         });
     }
 
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+    public static Creator<Lessons> CREATOR = new Creator<Lessons>() {
+        @Override
         public Lessons createFromParcel(Parcel in) {
             return new Lessons(in);
         }
+        @Override
         public Lessons[] newArray(int size) {
             return new Lessons[size];
         }

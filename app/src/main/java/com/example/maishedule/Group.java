@@ -1,7 +1,10 @@
 package com.example.maishedule;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import androidx.annotation.RequiresApi;
 
 import java.util.List;
 
@@ -25,11 +28,11 @@ public class Group implements Parcelable {
 
     public void setShedule(List<Shedule> shedule) {mShedule = shedule;}
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     public Group(Parcel in){
-        String[] data = new String[1];
-
-        in.readStringArray(data);
-        mGroup = data[0];
+        mGroup = in.readString();
+        //mShedule = in.readArrayList(null);
+        mShedule = in.readParcelableList(null, null);
     }
 
     @Override
@@ -37,17 +40,21 @@ public class Group implements Parcelable {
         return 0;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[] {
-                mGroup
-        });
+        dest.writeString(mGroup);
+        //dest.writeList(mShedule);
+        dest.writeParcelableList( mShedule, 1);
     }
 
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+    public static Creator<Group> CREATOR = new Creator<Group>() {
+        @RequiresApi(api = Build.VERSION_CODES.Q)
+        @Override
         public Group createFromParcel(Parcel in) {
             return new Group(in);
         }
+        @Override
         public Group[] newArray(int size) {
             return new Group[size];
         }

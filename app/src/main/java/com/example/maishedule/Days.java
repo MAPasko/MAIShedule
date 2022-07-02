@@ -1,11 +1,14 @@
 package com.example.maishedule;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.RequiresApi;
+
 import java.util.List;
 
-public class Days {
+public class Days implements Parcelable{
 
     private int mDay;
 
@@ -25,12 +28,35 @@ public class Days {
 
     public void setLessons(List<Lessons> lessons) {mLessons = lessons;}
 
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public Group createFromParcel(Parcel in) {
-            return new Group(in);
+    public static Creator<Days> CREATOR = new Creator<Days>() {
+        @RequiresApi(api = Build.VERSION_CODES.Q)
+        @Override
+        public Days createFromParcel(Parcel in) {
+            return new Days(in);
         }
-        public Group[] newArray(int size) {
-            return new Group[size];
+        @Override
+        public Days[] newArray(int size) {
+            return new Days[size];
         }
     };
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    public Days (Parcel in) {
+        mDay = in.readInt();
+        //mLessons = in.readArrayList(null);
+        mLessons = in.readParcelableList(null, null);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mDay);
+        dest.writeList(mLessons);
+        dest.writeParcelableList(mLessons, 1);
+    }
 }

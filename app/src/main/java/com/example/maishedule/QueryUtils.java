@@ -107,9 +107,6 @@ public class QueryUtils {
         }
 
         List<Group> groups = new ArrayList<>();
-        List<Shedule> shedules = new ArrayList<>();
-        List<Days> days = new ArrayList<>();
-        List<Lessons> lessons = new ArrayList<>();
 
         try {
             JSONObject baseJsonResponse = new JSONObject(groupsJSON);
@@ -117,56 +114,65 @@ public class QueryUtils {
             JSONArray groupsArray = baseJsonResponse.getJSONArray("groups");
 
             for(int i = 0; i < groupsArray.length(); i++) {
-                JSONArray sheduleArray = baseJsonResponse.getJSONArray("shedule");
 
                 JSONObject currentGroup = groupsArray.getJSONObject(i);
 
-                JSONObject oneGroup = currentGroup.getJSONObject("groups");
+                //JSONObject oneGroup = currentGroup.getJSONObject("groups");
 
-                String groupId = oneGroup.getString("groupid");
+                JSONArray sheduleArray = currentGroup.getJSONArray("schedule");
+
+                List<Shedule> shedules = new ArrayList<>();
+
+                String groupId = currentGroup.getString("groupid");
 
                 for(int j = 0; j < sheduleArray.length(); j++) {
-                    JSONArray daysArray = baseJsonResponse.getJSONArray("days");
 
                     currentGroup = sheduleArray.getJSONObject(j);
 
-                    oneGroup = currentGroup.getJSONObject("shedule");
+                    JSONArray daysArray = currentGroup.getJSONArray("days");
 
-                    int week = oneGroup.getInt("week");
+                    //oneGroup = currentGroup.getJSONObject("schedule");
+
+                    List<Days> days = new ArrayList<>();
+
+                    int week = currentGroup.getInt("week");
 
                     for(int k = 0; k < daysArray.length(); k++) {
-                        JSONArray lessonsArray = baseJsonResponse.getJSONArray("lessons");
 
                         currentGroup = daysArray.getJSONObject(k);
 
-                        oneGroup = currentGroup.getJSONObject("days");
+                        JSONArray lessonsArray = currentGroup.getJSONArray("lessons");
 
-                        int currentDay = oneGroup.getInt("day");
+                        //oneGroup = currentGroup.getJSONObject("days");
+
+                        List<Lessons> lessons = new ArrayList<>();
+
+                        int currentDay = currentGroup.getInt("day");
 
                         for(int l = 0; l < lessonsArray.length(); l++) {
 
                             currentGroup = lessonsArray.getJSONObject(l);
 
-                            oneGroup = currentGroup.getJSONObject("lessons");
+                            //JSONObject oneLesson = currentGroup.getJSONObject("lessons");
 
-                            String currentLesson = oneGroup.getString("lesson");
-                            String teacher = oneGroup.getString("teacher");
-                            String time = oneGroup.getString("time");
-                            String place = oneGroup.getString("place");
-
+                            String currentLesson = currentGroup.getString("lesson");
+                            String teacher = currentGroup.getString("teacher");
+                            String time = currentGroup.getString("time");
+                            String place = currentGroup.getString("place");
+                            //Log.e("ПРОВЕРКА", currentLesson);
                             Lessons lesson = new Lessons(currentLesson, teacher, time, place);
                             lessons.add(lesson);
                         }
 
-                        Days day = new Days(currentDay, (List<Lessons>) lessons);
+                        Days day = new Days(currentDay, lessons);
                         days.add(day);
                     }
 
-                    Shedule shedule = new Shedule(week, (List<Days>) days);
+                    Shedule shedule = new Shedule(week, days);
                     shedules.add(shedule);
                 }
-
-                Group group = new Group(groupId, (List<Shedule>) shedules);
+                Log.e("ПРОВЕРКА", groupId);
+                Group group = new Group(groupId, shedules);
                 groups.add(group);
             }
         } catch (JSONException e) {

@@ -3,6 +3,7 @@ package com.example.maishedule;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,7 @@ public class GroupChooseFragment extends Fragment {
         View view = inflater.inflate(R.layout.choose_group, container, false);
 
        // if(getArguments() != null)
-        List<Group> groups = getArguments().getParcelable("parced_info");
+        List<Group> groups = getArguments().getParcelableArrayList("parced_info");
 
         RecyclerView groupRecycledView = (RecyclerView) view.findViewById(R.id.container);
         GroupAdapter .OnGroupClickListener groupClickListener = new GroupAdapter.OnGroupClickListener() {
@@ -28,11 +29,17 @@ public class GroupChooseFragment extends Fragment {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("sPref",group.getGroup());
                 editor.apply();
-                getActivity().getSupportFragmentManager().popBackStack();
+                getActivity().getFragmentManager().popBackStack();
+                //getActivity().getSupportFragmentManager().popBackStackImmediate();
+                //Log.e("ПРОВЕРКА", "aaaaaaaaaaaaaa");
             }
         };
         //mAdapter = new GroupAdapter(this, groups, groupClickListener);
         groupRecycledView.setAdapter(new GroupAdapter(getContext(),groups,groupClickListener));
     return view;
+    }
+
+    public void onDestroyView() {
+        super.onDestroyView();
     }
 }

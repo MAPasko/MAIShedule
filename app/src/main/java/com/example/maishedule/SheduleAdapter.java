@@ -35,9 +35,9 @@ public class SheduleAdapter extends RecyclerView.Adapter<SheduleAdapter.ViewHold
     @Override
     public void onBindViewHolder(SheduleAdapter.ViewHolder holder, int viewType) {
         Group group = shedules.get(holder.getAdapterPosition());
-        holder.timeView.setText(group.getTime());
-        holder.lessonView.setText(group.getLesson());
-        holder.placeView.setText(group.getPlace());
+        holder.timeView.setText(group.getGroup());
+        holder.lessonView.setText(group.getGroup());
+        holder.placeView.setText(group.getGroup());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

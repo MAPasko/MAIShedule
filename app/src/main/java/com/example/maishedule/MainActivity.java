@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Group>> {
@@ -28,11 +29,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private ProgressBar mProgressBar;
 
-    private Bundle bundle;
+    private Bundle bundle = new Bundle();
 
-    private SharedPreferences sPref = getBaseContext().getSharedPreferences("sPref",MODE_PRIVATE);
+    private SharedPreferences sPref;
 
     //private SharedPreferences.Editor prefsEditor = sPref.edit();
+    // получаем экземпляр FragmentTransaction
+    FragmentManager fragmentManager = getSupportFragmentManager();
+    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,25 +60,19 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             mEmptyStateTextView.setText("Нет соединения с интернетом.");
         }
 
-        // получаем экземпляр FragmentTransaction
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        // добавляем фрагмент
-        GroupChooseFragment groupChooseFragment = new GroupChooseFragment();
-        fragmentTransaction.add(R.id.choose_group_view, groupChooseFragment);
-        fragmentTransaction.commit();
 
-        String group = sPref.getString("sPref", null);
+        //String group = sPref.getString("sPref", null);
 
         TextView startSearch = (TextView) findViewById(R.id.start);
         startSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FragmentTransaction newTransaction = fragmentManager.beginTransaction();
                 SheduleFragment sheduleFragment = new SheduleFragment();
-                fragmentTransaction.add(R.id.choose_group_view, sheduleFragment);
+                newTransaction.add(R.id.choose_group_view, sheduleFragment);
                 sheduleFragment.setArguments(bundle);
-                fragmentTransaction.commit();
+                newTransaction.commit();
                         //Intent sheduleIntent = new Intent(MainActivity.this, SheduleFragment.class);
                         //startActivity(sheduleIntent);
             }
@@ -89,10 +87,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<List<Group>> loader, List<Group> groups) {
         mProgressBar.setVisibility(View.GONE);
-        bundle =new Bundle();
-        bundle.putParcelable("parced_info", (Parcelable) groups);
-        GroupChooseFragment info = new GroupChooseFragment();
-        info.setArguments(bundle);
+
+        //bundle = new Bundle();
+        bundle.putParcelableArrayList("parced_info", (ArrayList<? extends Parcelable>) groups);
+        // добавляем фрагмент
+        GroupChooseFragment groupChooseFragment = new GroupChooseFragment();
+        fragmentTransaction.add(R.id.choose_group_view, groupChooseFragment);
+        groupChooseFragment.setArguments(bundle);
+        fragmentTransaction.commit();
+        //GroupChooseFragment info = new GroupChooseFragment();
     }
 
     @Override
