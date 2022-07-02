@@ -171,7 +171,7 @@ public class QueryUtils {
                     Shedule shedule = new Shedule(week, days);
                     shedules.add(shedule);
                 }
-                Log.e("ПРОВЕРКА", groupId);
+                //Log.e("ПРОВЕРКА", groupId);
                 Group group = new Group(groupId, shedules);
                 groups.add(group);
             }

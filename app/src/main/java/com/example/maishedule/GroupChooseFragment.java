@@ -21,17 +21,23 @@ public class GroupChooseFragment extends Fragment {
        // if(getArguments() != null)
         List<Group> groups = getArguments().getParcelableArrayList("parced_info");
 
-        RecyclerView groupRecycledView = (RecyclerView) view.findViewById(R.id.container);
+        RecyclerView groupRecycledView = (RecyclerView) view.findViewById(R.id.recycler);
         GroupAdapter .OnGroupClickListener groupClickListener = new GroupAdapter.OnGroupClickListener() {
             @Override
             public void onGroupClick(Group group, int position) {
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sPref",Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("sPref",group.getGroup());
-                editor.apply();
-                getActivity().getFragmentManager().popBackStack();
-                //getActivity().getSupportFragmentManager().popBackStackImmediate();
-                //Log.e("ПРОВЕРКА", "aaaaaaaaaaaaaa");
+                editor.commit();
+                getActivity().findViewById(R.id.start).setVisibility(View.VISIBLE);
+                getParentFragmentManager().popBackStack();
+                //getParentFragmentManager().findFragmentById();
+                //getActivity().setExitSharedElementCallback();
+                //getParentFragmentManager()
+                //        .beginTransaction()
+                //                .replace()
+                //                        .commit();
+                Log.e("ПРОВЕРКА", group.getGroup());
             }
         };
         //mAdapter = new GroupAdapter(this, groups, groupClickListener);

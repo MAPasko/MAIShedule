@@ -13,6 +13,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -24,6 +25,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final String MAI_REQUEST_URL = "https://f3c1014e-8e89-49a9-8c30-13367dd34f68.mock.pstmn.io/education/schedule/detail.php";
 
     private static final int SHEDULE_LOADER_ID = 1;
+
+    private Button mButton;
 
     private TextView mEmptyStateTextView;
 
@@ -38,10 +41,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mButton = (Button) findViewById(R.id.start);
 
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
 
@@ -61,20 +67,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
 
 
-
-        //String group = sPref.getString("sPref", null);
-
         TextView startSearch = (TextView) findViewById(R.id.start);
         startSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mButton.setVisibility(View.GONE);
+                //String group = sPref.getString("sPref", null);
                 FragmentTransaction newTransaction = fragmentManager.beginTransaction();
                 SheduleFragment sheduleFragment = new SheduleFragment();
-                newTransaction.add(R.id.choose_group_view, sheduleFragment);
+                newTransaction.add(R.id.container, sheduleFragment);
                 sheduleFragment.setArguments(bundle);
                 newTransaction.commit();
-                        //Intent sheduleIntent = new Intent(MainActivity.this, SheduleFragment.class);
-                        //startActivity(sheduleIntent);
             }
         });
     }
@@ -87,13 +90,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<List<Group>> loader, List<Group> groups) {
         mProgressBar.setVisibility(View.GONE);
-
+        //mButton.setVisibility(View.GONE);
         //bundle = new Bundle();
         bundle.putParcelableArrayList("parced_info", (ArrayList<? extends Parcelable>) groups);
         // добавляем фрагмент
         GroupChooseFragment groupChooseFragment = new GroupChooseFragment();
-        fragmentTransaction.add(R.id.choose_group_view, groupChooseFragment);
+        fragmentTransaction.add(R.id.choose_group_view, groupChooseFragment, "choose_group");
         groupChooseFragment.setArguments(bundle);
+        fragmentTransaction.addToBackStack("group");
         fragmentTransaction.commit();
         //GroupChooseFragment info = new GroupChooseFragment();
     }
