@@ -72,12 +72,23 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onClick(View v) {
                 mButton.setVisibility(View.GONE);
-                //String group = sPref.getString("sPref", null);
                 FragmentTransaction newTransaction = fragmentManager.beginTransaction();
                 SheduleFragment sheduleFragment = new SheduleFragment();
                 newTransaction.add(R.id.container, sheduleFragment);
                 sheduleFragment.setArguments(bundle);
+                newTransaction.addToBackStack("week");
                 newTransaction.commit();
+            }
+        });
+
+        mEmptyStateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GroupChooseFragment groupChooseFragment = new GroupChooseFragment();
+                fragmentTransaction.add(R.id.choose_group_view, groupChooseFragment, "choose_group");
+                groupChooseFragment.setArguments(bundle);
+                fragmentTransaction.addToBackStack("group");
+                fragmentTransaction.commit();
             }
         });
     }
@@ -90,16 +101,20 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<List<Group>> loader, List<Group> groups) {
         mProgressBar.setVisibility(View.GONE);
-        //mButton.setVisibility(View.GONE);
+        sPref = getSharedPreferences("sPref", Context.MODE_PRIVATE);
         //bundle = new Bundle();
         bundle.putParcelableArrayList("parced_info", (ArrayList<? extends Parcelable>) groups);
-        // добавляем фрагмент
-        GroupChooseFragment groupChooseFragment = new GroupChooseFragment();
-        fragmentTransaction.add(R.id.choose_group_view, groupChooseFragment, "choose_group");
-        groupChooseFragment.setArguments(bundle);
-        fragmentTransaction.addToBackStack("group");
-        fragmentTransaction.commit();
-        //GroupChooseFragment info = new GroupChooseFragment();
+        if (sPref.contains("sPref")) {
+            mButton.setVisibility(View.VISIBLE);
+            mEmptyStateTextView.setText("Выбранная группа: " + sPref.getString("sPref", null));
+        } else {
+            // добавляем фрагмент
+            GroupChooseFragment groupChooseFragment = new GroupChooseFragment();
+            fragmentTransaction.add(R.id.choose_group_view, groupChooseFragment, "choose_group");
+            groupChooseFragment.setArguments(bundle);
+            fragmentTransaction.addToBackStack("group");
+            fragmentTransaction.commit();
+        }
     }
 
     @Override

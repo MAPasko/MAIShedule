@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,7 +19,8 @@ public class GroupChooseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.choose_group, container, false);
 
-       // if(getArguments() != null)
+        getActivity().findViewById(R.id.start).setVisibility(View.GONE);
+
         List<Group> groups = getArguments().getParcelableArrayList("parced_info");
 
         RecyclerView groupRecycledView = (RecyclerView) view.findViewById(R.id.recycler);
@@ -30,17 +32,13 @@ public class GroupChooseFragment extends Fragment {
                 editor.putString("sPref",group.getGroup());
                 editor.commit();
                 getActivity().findViewById(R.id.start).setVisibility(View.VISIBLE);
+                TextView textView = getActivity().findViewById(R.id.empty_view);
+                textView.setText("Выбранная группа: " + sharedPreferences.getString("sPref", null));
                 getParentFragmentManager().popBackStack();
-                //getParentFragmentManager().findFragmentById();
-                //getActivity().setExitSharedElementCallback();
-                //getParentFragmentManager()
-                //        .beginTransaction()
-                //                .replace()
-                //                        .commit();
-                Log.e("ПРОВЕРКА", group.getGroup());
+
+                //Log.e("ПРОВЕРКА", group.getGroup());
             }
         };
-        //mAdapter = new GroupAdapter(this, groups, groupClickListener);
         groupRecycledView.setAdapter(new GroupAdapter(getContext(),groups,groupClickListener));
     return view;
     }

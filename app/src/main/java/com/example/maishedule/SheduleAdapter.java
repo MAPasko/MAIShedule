@@ -13,35 +13,33 @@ import java.util.List;
 public class SheduleAdapter extends RecyclerView.Adapter<SheduleAdapter.ViewHolder> {
 
     interface OnSheduleClickListener{
-        void onSheduleClick(Group groups,int position);
+        void onSheduleClick(Shedule shedule,int position);
     }
 
     private final OnSheduleClickListener onClickListener;
     private final LayoutInflater inflater;
-    private final List<Group> shedules;
+    private final List<Shedule> shedules;
 
-    public SheduleAdapter(Context context, List<Group> groups, OnSheduleClickListener onClickListener) {
-        this.shedules = groups;
+    public SheduleAdapter(Context context, List<Shedule> shedules, OnSheduleClickListener onClickListener) {
+        this.shedules = shedules;
         this.inflater = LayoutInflater.from(context);
         this.onClickListener = onClickListener;
     }
 
     @Override
     public SheduleAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.list_item,parent,false);
+        View view = inflater.inflate(R.layout.week_list, parent,false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(SheduleAdapter.ViewHolder holder, int viewType) {
-        Group group = shedules.get(holder.getAdapterPosition());
-        holder.timeView.setText(group.getGroup());
-        holder.lessonView.setText(group.getGroup());
-        holder.placeView.setText(group.getGroup());
+        Shedule shedule = shedules.get(holder.getAdapterPosition());
+        holder.weekView.setText(shedule.getWeek() + " неделя");
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickListener.onSheduleClick(group, holder.getAdapterPosition());
+                onClickListener.onSheduleClick(shedule, holder.getAdapterPosition());
             }
         });
     }
@@ -52,12 +50,10 @@ public class SheduleAdapter extends RecyclerView.Adapter<SheduleAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView timeView, lessonView, placeView;
+        final TextView weekView;
         ViewHolder(View view) {
             super(view);
-            timeView = (TextView) view.findViewById(R.id.time);
-            lessonView = (TextView) view.findViewById(R.id.lesson);
-            placeView = (TextView) view.findViewById(R.id.place);
+            weekView = (TextView) view.findViewById(R.id.week);
         }
     }
 }

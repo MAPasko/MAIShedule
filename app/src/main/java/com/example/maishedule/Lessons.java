@@ -9,14 +9,17 @@ public class Lessons implements Parcelable{
 
     private String mTeacher;
 
+    private String mDate;
+
     private String mTime;
 
     private String mPlace;
 
 
-    public Lessons(String Lesson,String Teacher, String Time, String Place) {
+    public Lessons(String Lesson,String Teacher, String Date, String Time, String Place) {
         mLesson = Lesson;
         mTeacher = Teacher;
+        mDate = Date;
         mTime = Time;
         mPlace = Place;
     }
@@ -26,6 +29,10 @@ public class Lessons implements Parcelable{
     public void setLesson(String lesson) {mLesson = lesson;}
 
     public String getTeacher() {return mTeacher;}
+
+    public  String getDate() {return mDate;}
+
+    public void setDate(String date) {mDate = date;}
 
     public String getTime() {return mTime;}
 
@@ -41,6 +48,7 @@ public class Lessons implements Parcelable{
         in.readStringArray(data);
         mLesson = data[0];
         mTeacher = data[1];
+        mDate = data[2];
         mTime = data[3];
         mPlace = data[4];
     }
@@ -55,6 +63,7 @@ public class Lessons implements Parcelable{
         dest.writeStringArray(new String[] {
                 mLesson,
                 mTeacher,
+                mDate,
                 mTime,
                 mPlace
         });

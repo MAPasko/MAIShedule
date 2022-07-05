@@ -24,7 +24,7 @@ public class Group implements Parcelable {
 
     public void setGroup(String group) {mGroup = group;}
 
-    public List<Shedule> getmShedule() {return mShedule;}
+    public List<Shedule> getShedule() {return mShedule;}
 
     public void setShedule(List<Shedule> shedule) {mShedule = shedule;}
 

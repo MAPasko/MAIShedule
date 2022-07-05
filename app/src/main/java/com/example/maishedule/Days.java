@@ -10,19 +10,19 @@ import java.util.List;
 
 public class Days implements Parcelable{
 
-    private int mDay;
+    private String mDay;
 
     private List<Lessons> mLessons;
 
-    public Days(int Day, List<Lessons> Lessons) {
+    public Days(String Day, List<Lessons> Lessons) {
 
         mDay = Day;
         mLessons = Lessons;
     }
 
-    public int getDay() {return mDay;}
+    public String getDay() {return mDay;}
 
-    public void setDay(int day) {mDay = day;}
+    public void setDay(String day) {mDay = day;}
 
     public List<Lessons> getLessons() {return mLessons;}
 
@@ -42,7 +42,7 @@ public class Days implements Parcelable{
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public Days (Parcel in) {
-        mDay = in.readInt();
+        mDay = in.readString();
         //mLessons = in.readArrayList(null);
         mLessons = in.readParcelableList(null, null);
     }
@@ -55,7 +55,7 @@ public class Days implements Parcelable{
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(mDay);
+        dest.writeString(mDay);
         dest.writeList(mLessons);
         dest.writeParcelableList(mLessons, 1);
     }

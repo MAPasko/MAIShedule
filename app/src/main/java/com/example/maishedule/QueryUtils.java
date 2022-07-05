@@ -115,52 +115,53 @@ public class QueryUtils {
 
             for(int i = 0; i < groupsArray.length(); i++) {
 
-                JSONObject currentGroup = groupsArray.getJSONObject(i);
+                JSONObject currentObject = groupsArray.getJSONObject(i);
 
                 //JSONObject oneGroup = currentGroup.getJSONObject("groups");
 
-                JSONArray sheduleArray = currentGroup.getJSONArray("schedule");
+                JSONArray sheduleArray = currentObject.getJSONArray("schedule");
 
                 List<Shedule> shedules = new ArrayList<>();
 
-                String groupId = currentGroup.getString("groupid");
+                String groupId = currentObject.getString("groupid");
 
                 for(int j = 0; j < sheduleArray.length(); j++) {
 
-                    currentGroup = sheduleArray.getJSONObject(j);
+                    currentObject = sheduleArray.getJSONObject(j);
 
-                    JSONArray daysArray = currentGroup.getJSONArray("days");
+                    JSONArray daysArray = currentObject.getJSONArray("days");
 
                     //oneGroup = currentGroup.getJSONObject("schedule");
 
                     List<Days> days = new ArrayList<>();
 
-                    int week = currentGroup.getInt("week");
+                    int week = currentObject.getInt("week");
 
                     for(int k = 0; k < daysArray.length(); k++) {
 
-                        currentGroup = daysArray.getJSONObject(k);
+                        currentObject = daysArray.getJSONObject(k);
 
-                        JSONArray lessonsArray = currentGroup.getJSONArray("lessons");
+                        JSONArray lessonsArray = currentObject.getJSONArray("lessons");
 
                         //oneGroup = currentGroup.getJSONObject("days");
 
                         List<Lessons> lessons = new ArrayList<>();
 
-                        int currentDay = currentGroup.getInt("day");
+                        String currentDay = currentObject.getString("day");
 
                         for(int l = 0; l < lessonsArray.length(); l++) {
 
-                            currentGroup = lessonsArray.getJSONObject(l);
+                            currentObject = lessonsArray.getJSONObject(l);
 
                             //JSONObject oneLesson = currentGroup.getJSONObject("lessons");
 
-                            String currentLesson = currentGroup.getString("lesson");
-                            String teacher = currentGroup.getString("teacher");
-                            String time = currentGroup.getString("time");
-                            String place = currentGroup.getString("place");
+                            String currentLesson = currentObject.getString("lesson");
+                            String teacher = currentObject.getString("teacher");
+                            String date = currentObject.getString("data");
+                            String time = currentObject.getString("time");
+                            String place = currentObject.getString("place");
                             //Log.e("ПРОВЕРКА", currentLesson);
-                            Lessons lesson = new Lessons(currentLesson, teacher, time, place);
+                            Lessons lesson = new Lessons(currentLesson, teacher, date, time, place);
                             lessons.add(lesson);
                         }
 
