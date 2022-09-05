@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -21,10 +22,13 @@ public class GroupChooseFragment extends Fragment {
 
         getActivity().findViewById(R.id.start).setVisibility(View.GONE);
 
+        //получение списка с расписанием из главной активности
         List<Group> groups = getArguments().getParcelableArrayList("parced_info");
 
+        //задаем адаптер для списка групп
         RecyclerView groupRecycledView = (RecyclerView) view.findViewById(R.id.recycler);
         GroupAdapter .OnGroupClickListener groupClickListener = new GroupAdapter.OnGroupClickListener() {
+            //устанавливаем событие при нажатии на элемент списка
             @Override
             public void onGroupClick(Group group, int position) {
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sPref",Context.MODE_PRIVATE);
@@ -35,8 +39,6 @@ public class GroupChooseFragment extends Fragment {
                 TextView textView = getActivity().findViewById(R.id.empty_view);
                 textView.setText("Выбранная группа: " + sharedPreferences.getString("sPref", null));
                 getParentFragmentManager().popBackStack();
-
-                //Log.e("ПРОВЕРКА", group.getGroup());
             }
         };
         groupRecycledView.setAdapter(new GroupAdapter(getContext(),groups,groupClickListener));

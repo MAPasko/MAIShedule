@@ -7,8 +7,6 @@ import java.util.List;
 
 public class SheduleLoader extends AsyncTaskLoader<List<Group>> {
 
-    private static final String LOG_TAG = SheduleLoader.class.getName();
-
     private String mUrl;
     /**
      * Constructs a new {@link SheduleLoader}.

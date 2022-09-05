@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -36,12 +37,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private SharedPreferences sPref;
 
-    //private SharedPreferences.Editor prefsEditor = sPref.edit();
-    // получаем экземпляр FragmentTransaction
+    // получаем экземпляр FragmentManager
     FragmentManager fragmentManager = getSupportFragmentManager();
-    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
 
+    //основные действия при создании главной активности
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         mProgressBar = (ProgressBar) findViewById(R.id.loading_indicator);
 
+        //создание сетевого подключения
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo =connMgr.getActiveNetworkInfo();
         if(networkInfo != null && networkInfo.isConnected()) {
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             mEmptyStateTextView.setText("Нет соединения с интернетом.");
         }
 
-
+        //привязка прослушивания нажатия к кнопке "найти расписание"
         TextView startSearch = (TextView) findViewById(R.id.start);
         startSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,11 +81,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 newTransaction.commit();
             }
         });
-
+        //привязка прослушивания нажатия на текстовое поле для изменения группы
         mEmptyStateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 GroupChooseFragment groupChooseFragment = new GroupChooseFragment();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.add(R.id.choose_group_view, groupChooseFragment, "choose_group");
                 groupChooseFragment.setArguments(bundle);
                 fragmentTransaction.addToBackStack("group");
@@ -93,11 +95,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         });
     }
 
+    //создание сетевого загрузчика
     @Override
     public Loader<List<Group>> onCreateLoader(int i, Bundle bundle) {
         return new SheduleLoader(this, MAI_REQUEST_URL);
     }
 
+    //выполнение действий после завершения загрузки
     @Override
     public void onLoadFinished(Loader<List<Group>> loader, List<Group> groups) {
         mProgressBar.setVisibility(View.GONE);
@@ -109,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             mEmptyStateTextView.setText("Выбранная группа: " + sPref.getString("sPref", null));
         } else {
             // добавляем фрагмент
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             GroupChooseFragment groupChooseFragment = new GroupChooseFragment();
             fragmentTransaction.add(R.id.choose_group_view, groupChooseFragment, "choose_group");
             groupChooseFragment.setArguments(bundle);
@@ -117,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
+    //возобновление загрузки
     @Override
     public void onLoaderReset(Loader<List<Group>> loader) {
     }

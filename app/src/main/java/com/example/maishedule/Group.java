@@ -31,7 +31,6 @@ public class Group implements Parcelable {
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public Group(Parcel in){
         mGroup = in.readString();
-        //mShedule = in.readArrayList(null);
         mShedule = in.readParcelableList(null, null);
     }
 
@@ -44,7 +43,6 @@ public class Group implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mGroup);
-        //dest.writeList(mShedule);
         dest.writeParcelableList( mShedule, 1);
     }
 

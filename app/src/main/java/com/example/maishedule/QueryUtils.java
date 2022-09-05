@@ -1,7 +1,5 @@
 package com.example.maishedule;
 
-import android.text.Html;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -27,6 +25,7 @@ public class QueryUtils {
     private QueryUtils() {
     }
 
+    //основная функция класса вызывающая остальные фцнкции
     public static List<Group> fetchSheduleData(String requestUrl) {
         URL url = createUrl(requestUrl);
 
@@ -42,6 +41,7 @@ public class QueryUtils {
         return groups;
     }
 
+    //создание URL для запроса
     private static URL createUrl(String stringUrl) {
         URL url = null;
         try {
@@ -52,6 +52,7 @@ public class QueryUtils {
         return url;
     }
 
+    //установка соединения
     private static String makehttprequest(URL url) throws IOException {
         String jsonResponse = "";
 
@@ -87,6 +88,7 @@ public class QueryUtils {
         return jsonResponse;
     }
 
+    //получение из потока данных
     private static String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder output = new StringBuilder();
         if(inputStream != null) {
@@ -101,6 +103,7 @@ public class QueryUtils {
         return output.toString();
     }
 
+    //преобразование json в структуру данных
     private static List<Group> extractFeatureFromJson(String groupsJSON) {
         if(TextUtils.isEmpty(groupsJSON)) {
             return null;
@@ -117,8 +120,6 @@ public class QueryUtils {
 
                 JSONObject currentObject = groupsArray.getJSONObject(i);
 
-                //JSONObject oneGroup = currentGroup.getJSONObject("groups");
-
                 JSONArray sheduleArray = currentObject.getJSONArray("schedule");
 
                 List<Shedule> shedules = new ArrayList<>();
@@ -131,8 +132,6 @@ public class QueryUtils {
 
                     JSONArray daysArray = currentObject.getJSONArray("days");
 
-                    //oneGroup = currentGroup.getJSONObject("schedule");
-
                     List<Days> days = new ArrayList<>();
 
                     int week = currentObject.getInt("week");
@@ -143,8 +142,6 @@ public class QueryUtils {
 
                         JSONArray lessonsArray = currentObject.getJSONArray("lessons");
 
-                        //oneGroup = currentGroup.getJSONObject("days");
-
                         List<Lessons> lessons = new ArrayList<>();
 
                         String currentDay = currentObject.getString("day");
@@ -153,14 +150,11 @@ public class QueryUtils {
 
                             currentObject = lessonsArray.getJSONObject(l);
 
-                            //JSONObject oneLesson = currentGroup.getJSONObject("lessons");
-
                             String currentLesson = currentObject.getString("lesson");
                             String teacher = currentObject.getString("teacher");
                             String date = currentObject.getString("data");
                             String time = currentObject.getString("time");
                             String place = currentObject.getString("place");
-                            //Log.e("ПРОВЕРКА", currentLesson);
                             Lessons lesson = new Lessons(currentLesson, teacher, date, time, place);
                             lessons.add(lesson);
                         }
