@@ -28,16 +28,14 @@ public class SheduleAdapter extends RecyclerView.Adapter<SheduleAdapter.ViewHold
 
     @Override
     public SheduleAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.list_item,parent,false);
+        View view = inflater.inflate(R.layout.week_list, parent,false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(SheduleAdapter.ViewHolder holder, int viewType) {
         Shedule shedule = shedules.get(holder.getAdapterPosition());
-        holder.timeView.setText(shedule.getTime());
-        holder.lessonView.setText(shedule.getLesson());
-        holder.placeView.setText(shedule.getPlace());
+        holder.weekView.setText(shedule.getWeek() + " неделя");
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,12 +50,10 @@ public class SheduleAdapter extends RecyclerView.Adapter<SheduleAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView timeView, lessonView, placeView;
+        final TextView weekView;
         ViewHolder(View view) {
             super(view);
-            timeView = (TextView) view.findViewById(R.id.time);
-            lessonView = (TextView) view.findViewById(R.id.lesson);
-            placeView = (TextView) view.findViewById(R.id.place);
+            weekView = (TextView) view.findViewById(R.id.week);
         }
     }
 }

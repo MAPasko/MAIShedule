@@ -1,7 +1,5 @@
 package com.example.maishedule;
 
-import android.text.Html;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -27,7 +25,8 @@ public class QueryUtils {
     private QueryUtils() {
     }
 
-    public static List<Shedule> fetchSheduleData(String requestUrl) {
+    //основная функция класса вызывающая остальные фцнкции
+    public static List<Group> fetchSheduleData(String requestUrl) {
         URL url = createUrl(requestUrl);
 
         String jsonResponse = null;
@@ -37,11 +36,12 @@ public class QueryUtils {
             Log.e(LOG_TAG,"Problem making the HTTP request.",e);
         }
 
-        List<Shedule> shedules = extractFeatureFromJson(jsonResponse);
+        List<Group> groups = extractFeatureFromJson(jsonResponse);
 
-        return shedules;
+        return groups;
     }
 
+    //создание URL для запроса
     private static URL createUrl(String stringUrl) {
         URL url = null;
         try {
@@ -52,6 +52,7 @@ public class QueryUtils {
         return url;
     }
 
+    //установка соединения
     private static String makehttprequest(URL url) throws IOException {
         String jsonResponse = "";
 
@@ -87,6 +88,7 @@ public class QueryUtils {
         return jsonResponse;
     }
 
+    //получение из потока данных
     private static String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder output = new StringBuilder();
         if(inputStream != null) {
@@ -101,35 +103,76 @@ public class QueryUtils {
         return output.toString();
     }
 
-    private static List<Shedule> extractFeatureFromJson(String sheduleJSON) {
-        if(TextUtils.isEmpty(sheduleJSON)) {
+    //преобразование json в структуру данных
+    private static List<Group> extractFeatureFromJson(String groupsJSON) {
+        if(TextUtils.isEmpty(groupsJSON)) {
             return null;
         }
 
-        List<Shedule> shedules = new ArrayList<>();
+        List<Group> groups = new ArrayList<>();
 
         try {
-            JSONObject baseJsonResponse = new JSONObject(sheduleJSON);
+            JSONObject baseJsonResponse = new JSONObject(groupsJSON);
 
-            JSONArray shedulesArray = baseJsonResponse.getJSONArray("schedule");
+            JSONArray groupsArray = baseJsonResponse.getJSONArray("groups");
 
-            for(int i = 0; i < shedulesArray.length(); i++) {
-                JSONObject currentShedule = shedulesArray.getJSONObject(i);
+            for(int i = 0; i < groupsArray.length(); i++) {
 
-                JSONObject oneDay = currentShedule.getJSONObject("days");
+                JSONObject currentObject = groupsArray.getJSONObject(i);
 
-                String lesson = oneDay.getString("lesson");
-                String teacher = oneDay.getString("teacher");
-                String data = oneDay.getString("data");
-                String time = oneDay.getString("time");
-                String place = oneDay.getString("place");
+                JSONArray sheduleArray = currentObject.getJSONArray("schedule");
 
-                Shedule shedule = new Shedule(lesson, teacher, data, time, place, i);
-                shedules.add(shedule);
+                List<Shedule> shedules = new ArrayList<>();
+
+                String groupId = currentObject.getString("groupid");
+
+                for(int j = 0; j < sheduleArray.length(); j++) {
+
+                    currentObject = sheduleArray.getJSONObject(j);
+
+                    JSONArray daysArray = currentObject.getJSONArray("days");
+
+                    List<Days> days = new ArrayList<>();
+
+                    int week = currentObject.getInt("week");
+
+                    for(int k = 0; k < daysArray.length(); k++) {
+
+                        currentObject = daysArray.getJSONObject(k);
+
+                        JSONArray lessonsArray = currentObject.getJSONArray("lessons");
+
+                        List<Lessons> lessons = new ArrayList<>();
+
+                        String currentDay = currentObject.getString("day");
+
+                        for(int l = 0; l < lessonsArray.length(); l++) {
+
+                            currentObject = lessonsArray.getJSONObject(l);
+
+                            String currentLesson = currentObject.getString("lesson");
+                            String teacher = currentObject.getString("teacher");
+                            String date = currentObject.getString("data");
+                            String time = currentObject.getString("time");
+                            String place = currentObject.getString("place");
+                            Lessons lesson = new Lessons(currentLesson, teacher, date, time, place);
+                            lessons.add(lesson);
+                        }
+
+                        Days day = new Days(currentDay, lessons);
+                        days.add(day);
+                    }
+
+                    Shedule shedule = new Shedule(week, days);
+                    shedules.add(shedule);
+                }
+                //Log.e("ПРОВЕРКА", groupId);
+                Group group = new Group(groupId, shedules);
+                groups.add(group);
             }
         } catch (JSONException e) {
-            Log.e("QueryUtils", "Problem parsing the shedule JSON results" + sheduleJSON, e);
+            Log.e("QueryUtils", "Problem parsing the shedule JSON results" + groupsJSON, e);
         }
-        return shedules;
+        return groups;
     }
 }

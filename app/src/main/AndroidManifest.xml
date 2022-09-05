@@ -20,23 +20,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SheduleActivity"
-            android:label="Расписание"
-            android:parentActivityName=".MainActivity">
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
-        </activity>
-
-        <activity android:name=".Information"
-            android:label="Расписание"
-            android:parentActivityName=".SheduleActivity">
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SheduleActivity"/>
-        </activity>
     </application>
 
 </manifest>
