@@ -28,7 +28,7 @@ public class SheduleAdapter extends RecyclerView.Adapter<SheduleAdapter.ViewHold
 
     @Override
     public SheduleAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.week_list, parent,false);
+        View view = inflater.inflate(R.layout.list_item, parent,false);
         return new ViewHolder(view);
     }
 
@@ -53,7 +53,7 @@ public class SheduleAdapter extends RecyclerView.Adapter<SheduleAdapter.ViewHold
         final TextView weekView;
         ViewHolder(View view) {
             super(view);
-            weekView = (TextView) view.findViewById(R.id.week);
+            weekView = (TextView) view.findViewById(R.id.group);
         }
     }
 }

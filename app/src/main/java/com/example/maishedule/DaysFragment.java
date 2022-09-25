@@ -32,7 +32,6 @@ public class DaysFragment extends Fragment {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 LessonsFragment lessonsFragment = new LessonsFragment();
-                //fragmentTransaction.replace(R.id.container, lessonsFragment, "da_fr");
                 fragmentTransaction.add(R.id.container, lessonsFragment);
                 lessonsFragment.setArguments(bundle);
                 fragmentTransaction.addToBackStack("days");

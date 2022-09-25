@@ -12,7 +12,7 @@ import java.util.List;
 
 public class DaysAdapter extends RecyclerView.Adapter<DaysAdapter.ViewHolder> {
 
-    interface OnDayClickListener{
+    interface OnDayClickListener {
         void onDayClick(Days day,int position);
     }
 
@@ -28,7 +28,7 @@ public class DaysAdapter extends RecyclerView.Adapter<DaysAdapter.ViewHolder> {
 
     @Override
     public DaysAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.week_list, parent,false);
+        View view = inflater.inflate(R.layout.list_day_item, parent,false);
         return new DaysAdapter.ViewHolder(view);
     }
 
@@ -53,7 +53,7 @@ public class DaysAdapter extends RecyclerView.Adapter<DaysAdapter.ViewHolder> {
         final TextView dayView;
         ViewHolder(View view) {
             super(view);
-            dayView = (TextView) view.findViewById(R.id.week);
+            dayView = (TextView) view.findViewById(R.id.day);
         }
     }
 }

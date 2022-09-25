@@ -18,7 +18,7 @@ import java.util.List;
 public class GroupChooseFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.choose_group, container, false);
+        View view = inflater.inflate(R.layout.shedule_list, container, false);
 
         getActivity().findViewById(R.id.start).setVisibility(View.GONE);
 
@@ -26,7 +26,7 @@ public class GroupChooseFragment extends Fragment {
         List<Group> groups = getArguments().getParcelableArrayList("parced_info");
 
         //задаем адаптер для списка групп
-        RecyclerView groupRecycledView = (RecyclerView) view.findViewById(R.id.recycler);
+        RecyclerView groupRecycledView = (RecyclerView) view.findViewById(R.id.list);
         GroupAdapter .OnGroupClickListener groupClickListener = new GroupAdapter.OnGroupClickListener() {
             //устанавливаем событие при нажатии на элемент списка
             @Override
@@ -41,7 +41,7 @@ public class GroupChooseFragment extends Fragment {
                 getParentFragmentManager().popBackStack();
             }
         };
-        groupRecycledView.setAdapter(new GroupAdapter(getContext(),groups,groupClickListener));
+        groupRecycledView.setAdapter(new GroupAdapter(getContext(), groups, groupClickListener));
     return view;
     }
 

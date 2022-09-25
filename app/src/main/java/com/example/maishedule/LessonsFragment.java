@@ -19,8 +19,8 @@ public class LessonsFragment extends Fragment {
 
         lessons = getArguments().getParcelableArrayList("lessons_info");
 
-        RecyclerView lesoonsRecyclerView = (RecyclerView) view.findViewById(R.id.list);
-        lesoonsRecyclerView.setAdapter(new LessonsAdapter(getContext(), lessons));
+        RecyclerView lessonsRecyclerView = (RecyclerView) view.findViewById(R.id.list);
+        lessonsRecyclerView.setAdapter(new LessonsAdapter(getContext(), lessons));
 
         return view;
     };
